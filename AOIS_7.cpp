@@ -1,11 +1,4 @@
-﻿#include <iostream>
-#include <vector>
-#include <map>
-#include <string>
-
-using namespace std;
-
-const int recursion_border_index = -1;
+﻿#include "AOIS_7.h"
 
 bool first_input_control(string& numerical_string, bool is_it_word_size_input)
 {
@@ -185,8 +178,165 @@ void task()
 	find_near_below(book, search_word);
 }
 
-int main()
+bool Test1()
 {
-	task();
-	return 0;
+	vector<bool> A{ 0,0,0,0 }, S{ 0,0,0,1 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (compare_result.first && !compare_result.second) {
+		cout << "Test1 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test1 incorrect!" << endl;
+		return false;
+	}
+}
+bool Test2()
+{
+	vector<bool> A{ 0,1,1,1 }, S{ 0,0,0,1 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (!compare_result.first && compare_result.second) {
+		cout << "Test2 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test2 incorrect!" << endl;
+		return false;
+	}
+}
+bool Test3()
+{
+	vector<bool> A{ 0,0,0,1 }, S{ 0,0,0,1 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (!compare_result.first && !compare_result.second) {
+		cout << "Test3 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test3 incorrect!" << endl;
+		return false;
+	}
+}
+bool Test4()
+{
+	vector<bool> A{ 1,1,1,1 }, S{ 0,1,1,1 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (!compare_result.first && compare_result.second) {
+		cout << "Test4 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test4 incorrect!" << endl;
+		return false;
+	}
+}
+bool Test5()
+{
+	vector<bool> A{ 1,1,1,1 }, S{ 1,1,1,1 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (!compare_result.first && !compare_result.second) {
+		cout << "Test5 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test5 incorrect!" << endl;
+		return false;
+	}
+}
+bool Test6()
+{
+	vector<bool> A{ 0,1,0,0,0,0 }, S{ 0,0,1,1,1,0 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (!compare_result.first && compare_result.second) {
+		cout << "Test6 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test6 incorrect!" << endl;
+		return false;
+	}
+}
+bool Test7()
+{
+	vector<bool> A{ 1,1,0,0,0,0 }, S{ 1,1,0,0,0,0 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (!compare_result.first && !compare_result.second) {
+		cout << "Test7 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test7 incorrect!" << endl;
+		return false;
+	}
+}
+bool Test8()
+{
+	vector<bool> A{ 0,1,1,1,1,1,1,1,1,1 }, S{ 1,0,0,0,0,0,0,0,0,0 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (compare_result.first && !compare_result.second) {
+		cout << "Test8 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test8 incorrect!" << endl;
+		return false;
+	}
+}
+bool Test9()
+{
+	vector<bool> A{ 0,1,1,1,1,1,1,1,1,1 }, S{ 0,1,1,1,1,1,1,1,1,1 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (!compare_result.first && !compare_result.second) {
+		cout << "Test9 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test9 incorrect!" << endl;
+		return false;
+	}
+}
+bool Test10()
+{
+	vector<bool> A{ 0,1,1,1,1,0,1,1,1,1 }, S{ 0,1,1,1,1,1,1,1,1,1 };
+	pair<bool, bool> compare_result = recursion_compare(A, S, A.size() - 1);
+	if (compare_result.first && !compare_result.second) {
+		cout << "Test10 correct!" << endl;
+		return true;
+	}
+	else {
+		cout << "Test10 incorrect!" << endl;
+		return false;
+	}
+}
+void tests()
+{
+	int correct_counter = 0;
+	correct_counter += Test1();
+	correct_counter += Test2();
+	correct_counter += Test3();
+	correct_counter += Test4();
+	correct_counter += Test5();
+	correct_counter += Test6();
+	correct_counter += Test7();
+	correct_counter += Test8();
+	correct_counter += Test9();
+	correct_counter += Test10();
+	if (correct_counter == 10) {
+		cout << "All tests passed correctly!" << endl;
+	}
+}
+void our_own_input()
+{
+	int choice;
+	cout << "1)Tests :: 2)Task" << endl;
+	cin >> choice;
+	switch (choice)
+	{
+	case 1: tests();
+		break;
+	case 2: task();
+		break;
+	default: cout << "Enter something possible to work with!" << endl;
+		return;
+	}
 }
