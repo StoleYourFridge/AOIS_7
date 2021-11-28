@@ -32,7 +32,7 @@ bool second_input_control(string& word, vector<bool>& word_we_build, int& expect
 	}
 	return true;
 }
-string word_output(vector<bool>& word)
+string word_output(const vector<bool>& word)
 {
 	string output;
 	for (int i = 0; i < word.size(); i++)
@@ -42,16 +42,17 @@ string word_output(vector<bool>& word)
 	}
 	return output;
 }
-void book_output(vector<vector<bool>> &book)
+void book_output(map<vector<bool>, bool> &book)
 {
+	map<vector<bool>, bool> :: iterator it = book.begin();
 	cout << "Amount of words : " << book.size() << endl;
-	for (int i = 0; i < book.size(); i++)
+	for (int i = 0; it != book.end(); it++, i++)
 	{
-		cout << "book[" << i + 1 << "] = " << word_output(book[i]) << endl;
+		cout << "book[" << i << "] = " << word_output(it->first) << endl;
 	}
 }
 
-vector<bool> unique_word_builder(map<vector<bool>, bool>& word, int& word_size)
+void unique_word_builder(map<vector<bool>, bool>& word, int& word_size)
 {
 	srand(time(NULL));
 	vector<bool> result;
@@ -72,17 +73,15 @@ vector<bool> unique_word_builder(map<vector<bool>, bool>& word, int& word_size)
 		}
 	} while (word[result] && counter < counter_border);
 	word[result] = true;
-	return result;
 }
-vector<vector<bool>> book_builder(int &word_size, int &lines_amount)
+map<vector<bool>, bool> book_builder(int &word_size, int &lines_amount)
 {
-	vector<vector<bool>> words;
 	map<vector<bool>, bool> unique_checker;
 	for (int i = 0; i < lines_amount; i++)
 	{
-		words.push_back(unique_word_builder(unique_checker, word_size));
+		unique_word_builder(unique_checker, word_size);
 	}
-	return words;
+	return unique_checker;
 }
 
 bool summary(bool first, bool second)
@@ -90,7 +89,7 @@ bool summary(bool first, bool second)
 	if (first && second) return true;
 	else return (first + second);
 }
-pair<bool, bool> recursion_compare(vector<bool> &term_one, vector<bool>& term_two, int position)
+pair<bool, bool> recursion_compare(vector<bool>& term_one, const vector<bool>& term_two, int position)
 {
 	pair<bool, bool> result;
 	if (position == recursion_border_index) {
@@ -105,7 +104,7 @@ pair<bool, bool> recursion_compare(vector<bool> &term_one, vector<bool>& term_tw
 		return result;
 	}
 }
-void compare_and_swap(vector<bool>& main_search_element, vector<bool>& near_current, vector<bool>& term, bool above, bool& overlap)
+void compare_and_swap(vector<bool>& main_search_element, vector<bool>& near_current, const vector<bool>& term, bool above, bool& overlap)
 {   
 	pair<bool, bool> main_compare = recursion_compare(main_search_element, term, main_search_element.size() - 1);
 	pair<bool, bool> current_near_compare = recursion_compare(near_current, term, near_current.size() - 1);
@@ -125,24 +124,26 @@ void compare_and_swap(vector<bool>& main_search_element, vector<bool>& near_curr
 	}
 }
 
-void find_near_above(vector<vector<bool>>& word_list, vector<bool>& compare_with)
+void find_near_above(map<vector<bool>, bool>& word_list, vector<bool>& compare_with)
 {
-	vector<bool> result(word_list[0].size(), 1);
+	map<vector<bool>, bool> ::iterator it = word_list.begin();
+	vector<bool> result(it->first.size(), 1);
 	bool overlap = false;
-	for (int i = 0; i < word_list.size(); i++)
+	for (it; it != word_list.end(); it++)
 	{
-		compare_and_swap(compare_with, result, word_list[i], true, overlap);
+		compare_and_swap(compare_with, result, it->first, true, overlap);
 	}
 	if (!overlap) cout << "Nothing found compare with this above!" << endl;
 	else cout << "Nearest word above found : " << word_output(result) << endl;
 }
-void find_near_below(vector<vector<bool>>& word_list, vector<bool>& compare_with)
+void find_near_below(map<vector<bool>, bool>& word_list, vector<bool>& compare_with)
 {
-	vector<bool> result(word_list[0].size(), 0);
+	map<vector<bool>, bool> ::iterator it = word_list.begin();
+	vector<bool> result(it->first.size(), 0);
 	bool overlap = false;
-	for (int i = 0; i < word_list.size(); i++)
+	for (it; it != word_list.end(); it++)
 	{
-		compare_and_swap(compare_with, result, word_list[i], false, overlap);
+		compare_and_swap(compare_with, result, it->first, false, overlap);
 	}
 	if (!overlap) cout << "Nothing found compare with this below!" << endl;
 	else cout << "Nearest word below found : " << word_output(result) << endl;
@@ -172,7 +173,7 @@ void task()
 		cout << "Enter something possibble to work with!!" << endl;
 		return;
 	}
-	vector<vector<bool>> book = book_builder(word_size, lines_amount);
+	map<vector<bool>, bool> book = book_builder(word_size, lines_amount);
 	book_output(book);
 	find_near_above(book, search_word);
 	find_near_below(book, search_word);
